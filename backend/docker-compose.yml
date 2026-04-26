@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: cinema_mysql
+    environment:
+      MYSQL_DATABASE: cinema_db
+      MYSQL_USER: cinema_user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
