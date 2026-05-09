@@ -34,6 +34,20 @@ public class AuthService {
     }
 
     public String login(String username, String password) {
-        return "tego jeszcze nie ma XD";
+        try {
+            AuthRequest requestData = new AuthRequest(username, password);
+            String jsonBody = gson.toJson(requestData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_URL + "/login"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+
+        } catch (Exception e) {
+            return "Cannot connect with a server.";
+        }
     }
 }
