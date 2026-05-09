@@ -22,8 +22,20 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        if(username.trim().isEmpty() || password.trim().isEmpty()) {
+            messageLabel.setTextFill(Color.RED);
+            messageLabel.setText("Put login and password");
+            return;
+        }
+
         String response = authService.login(username, password);
-        messageLabel.setTextFill(Color.GRAY);
+
+        if(response.contains("Success")) {
+            messageLabel.setTextFill(Color.GREEN);
+        } else {
+            messageLabel.setTextFill(Color.RED);
+        }
+
         messageLabel.setText(response);
     }
 
@@ -40,7 +52,7 @@ public class LoginController {
 
         String response = authService.register(username, password);
 
-        if (response.contains("succes.")) {
+        if (response.contains("succes")) {
             messageLabel.setTextFill(Color.GREEN);
             usernameField.clear();
             passwordField.clear();

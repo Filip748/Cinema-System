@@ -41,13 +41,21 @@ public class AuthController {
         return ResponseEntity.ok("Register done.");
     }
 
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
-        Optional<Employee> employeeOptional = employeeRepository.findByUsername(request.getUsername());
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest request){
+        Optional<Employee> employeeOpt = employeeRepository.findByUsername(request.getUsername());
 
-        if(employeeOptional.isPresent() && employeeOptional.get().getPassword().equals(request.getPassword())) {
-            return ResponseEntity.ok("Login succes.");
+        if(employeeOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Login does not exists");
         }
 
-        return ResponseEntity.status(401).body("Incorrect Login or Password");
+        Employee employee = employeeOpt.get();
+
+        if(!employee.getPassword().equals(request.getPassword())) {
+            return ResponseEntity.badRequest().body("Incorrect password");
+        }
+
+        return ResponseEntity.ok("Success login employee: " + employee.getRole());
     }
+
 }
