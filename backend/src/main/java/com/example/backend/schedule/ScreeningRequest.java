@@ -32,5 +32,4 @@ public class ScreeningRequest {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
-
 }

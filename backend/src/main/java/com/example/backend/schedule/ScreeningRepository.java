@@ -18,5 +18,11 @@ public interface ScreeningRepository extends JpaRepository<Screening, Long> {
             @Param("roomNumber") int roomNumber,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
-            );
+    );
+
+    @Query("SELECT DISTINCT s.roomNumber FROM Screening s WHERE s.startTime < :endTime AND s.endTime > :startTime")
+    List<Integer> findOccupiedRooms(
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
 }

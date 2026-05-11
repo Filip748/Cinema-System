@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.frontend.schedule.ScheduleViewController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0">
+         <children>
+            <ComboBox fx:id="movieComboBox" prefWidth="150.0" />
+            <DatePicker fx:id="startDatePicker" />
+            <DatePicker fx:id="endDatePicker" />
+            <TextField fx:id="timeField" />
+            <ComboBox fx:id="roomComboBox" prefWidth="150.0" />
+            <Label fx:id="messageLabel" text="Label" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button text="Save" onAction="#handleSave" prefWidth="300.0" style="-fx-font-weight: bold; -fx-base: #28a745;" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
