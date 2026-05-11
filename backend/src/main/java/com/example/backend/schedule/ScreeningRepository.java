@@ -1,0 +1,28 @@
+package com.example.backend.schedule;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface ScreeningRepository extends JpaRepository<Screening, Long> {
+
+    @Query("SELECT s FROM Screening s WHERE s.roomNumber = :roomNumber " +
+        "AND s.startTime < :endTime AND s.endTime > :startTime")
+    List<Screening> findOverLappingScreenings(
+            @Param("roomNumber") int roomNumber,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
+
+    @Query("SELECT DISTINCT s.roomNumber FROM Screening s WHERE s.startTime < :endTime AND s.endTime > :startTime")
+    List<Integer> findOccupiedRooms(
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
+}
