@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.frontend.schedule.AddMovieController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="15.0">
+         <children>
+            <Label text="Add Movie" />
+            <TextField fx:id="titleField" prefHeight="26.0" prefWidth="595.0" promptText="Titile" />
+            <TextField fx:id="genreField" promptText="Genre" />
+            <TextField fx:id="durationField" promptText="Duration time (minutes)" />
+            <HBox alignment="CENTER" prefHeight="69.0" prefWidth="600.0" spacing="40.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" onAction="#handleSave" text="Save" />
+               </children>
+            </HBox>
+            <Label fx:id="statusLabel" />
+         </children></VBox>
+   </children>
+</AnchorPane>
