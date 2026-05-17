@@ -40,6 +40,7 @@ public class CinemaHallService {
                 return "Server Error " + response.statusCode() + response.body();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return "Cannot connect with a server.";
         }
     }

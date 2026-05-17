@@ -10,6 +10,8 @@ module com.example.frontend {
     exports com.example.frontend;
 
     opens com.example.frontend.login to javafx.fxml, com.google.gson;
-
+    opens com.example.frontend.creator.dto to com.google.gson;
     opens com.example.frontend.schedule to javafx.fxml, com.google.gson;
+    exports com.example.frontend.creator;
+    opens com.example.frontend.creator to javafx.graphics, javafx.fxml;
 }
