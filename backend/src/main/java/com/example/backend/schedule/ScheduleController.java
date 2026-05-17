@@ -132,6 +132,11 @@ public class ScheduleController {
 
     }
 
+    @GetMapping("/screenings")
+    public ResponseEntity<List<Screening>> getAllScreenings() {
+        return ResponseEntity.ok(screeningRepository.findAll());
+    }
+
 
 
 }

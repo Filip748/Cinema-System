@@ -1,33 +1,31 @@
 package com.example.frontend.creator;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.example.frontend.creator.dto.SeatRequest;
 
-public class CinemaHallApplication extends Application {
+// 1. Zmieniamy dziedziczenie z Application na VBox
+public class CinemaHallApplication extends VBox {
 
     private final CinemaHallService hallService = new CinemaHallService();
     private Label statusLabel;
     private final ToggleButton[][] seatButtons = new ToggleButton[15][15];
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("CinemaHall Creator Panel");
-
-        VBox root = new VBox(15);
-        root.setPadding(new Insets(20));
-        root.setStyle("-fx-font-family: 'Segoe UI', sans-serif;");
+    // 2. Metoda start() zamienia się w konstruktor klasy
+    public CinemaHallApplication() {
+        // Konfigurujemy samych siebie (ponieważ ta klasa to teraz VBox)
+        this.setSpacing(15);
+        this.setPadding(new Insets(20));
+        // Dodałem białe tło i lekkie zaokrąglenie, żeby wyglądało jak ładna karta na szarym Dashboardzie
+        this.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
 
         statusLabel = new Label("Status: Make new CinemaHall");
 
@@ -69,13 +67,8 @@ public class CinemaHallApplication extends Application {
         deleteBox.getChildren().addAll(deleteHallIdField, deleteBtn);
         VBox dangerZone = new VBox(5, step4Label, deleteBox);
 
-
-
-        root.getChildren().addAll(statusLabel, new Separator(), hallBox, new Separator(), gridBox, dangerZone);
-
-        Scene scene = new Scene(root, 650, 750);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        // Dodajemy wszystkie elementy do NASZEGO VBoxa
+        this.getChildren().addAll(statusLabel, new Separator(), hallBox, new Separator(), gridBox, dangerZone);
     }
 
     private GridPane createSeatGrid() {
