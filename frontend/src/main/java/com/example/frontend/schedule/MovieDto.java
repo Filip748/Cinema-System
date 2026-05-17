@@ -9,6 +9,7 @@ public class MovieDto {
     private String genre;
     private int durationMinutes;
 
+    public Long getId() {return id; }
     @Override
     public String toString() {
         return title + " (" + durationMinutes + " min)";
