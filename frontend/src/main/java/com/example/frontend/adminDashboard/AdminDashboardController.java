@@ -56,12 +56,12 @@ public class AdminDashboardController {
 
     @FXML
     public void showStatistics() {
-        showPlaceholder("TUTAJ BĘDĄ WYKRESY: Statystyki");
+        loadView("/com/example/frontend/stats/statistics-view.fxml");
     }
 
     @FXML
     public void logout() {
-        showPlaceholder("Wylogowywanie...");
+        showPlaceholder("Log out");
     }
 
     private void loadView(String fxmlPath) {
@@ -83,6 +83,7 @@ public class AdminDashboardController {
 
         } catch (IOException e) {
             showPlaceholder("ERROR");
+            e.printStackTrace();
         } catch (NullPointerException e) {
             showPlaceholder("ERROR" + fxmlPath);
         }

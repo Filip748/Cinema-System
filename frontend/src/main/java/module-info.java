@@ -21,4 +21,5 @@ module com.example.frontend {
     exports com.example.frontend.creator;
     opens com.example.frontend.creator to javafx.graphics, javafx.fxml;
     opens com.example.frontend.adminDashboard to javafx.fxml;
+    opens com.example.frontend.statistics to javafx.fxml, javafx.base, com.fasterxml.jackson.databind;
 }
