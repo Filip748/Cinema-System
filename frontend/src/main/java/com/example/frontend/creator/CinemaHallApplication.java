@@ -18,6 +18,11 @@ public class CinemaHallApplication extends VBox {
     private final CinemaHallService hallService = new CinemaHallService();
     private Label statusLabel;
     private final ToggleButton[][] seatButtons = new ToggleButton[15][15];
+    private TextField hallIdField;
+    private TextField hallNameField;
+    private TextField deleteHallIdField;
+
+
 
     // 2. Metoda start() zamienia się w konstruktor klasy
     public CinemaHallApplication() {
@@ -27,10 +32,10 @@ public class CinemaHallApplication extends VBox {
         // Dodałem białe tło i lekkie zaokrąglenie, żeby wyglądało jak ładna karta na szarym Dashboardzie
         this.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
 
-        statusLabel = new Label("Status: Make new CinemaHall");
+        statusLabel = new Label("Status: Make new Cine`maHall");
 
         Label step1Label = new Label("1. Create new CinemaHall:");
-        TextField hallNameField = new TextField("");
+        hallNameField = new TextField("");
         hallNameField.setPromptText("Name of the hall...");
 
         Button addHallBtn = new Button("+ Add CinemaHall");
@@ -43,7 +48,7 @@ public class CinemaHallApplication extends VBox {
         HBox idBox = new HBox(10);
         idBox.setAlignment(Pos.CENTER_LEFT);
         Label idLabel = new Label("CinemaHall ID:");
-        TextField hallIdField = new TextField();
+        hallIdField = new TextField();
         hallIdField.setPrefWidth(50);
 
         Button generateBtn = new Button("Generate Seats");
@@ -57,7 +62,7 @@ public class CinemaHallApplication extends VBox {
         Label step4Label = new Label("3. Delete CinemaHall:");
         HBox deleteBox = new HBox(10);
 
-        TextField deleteHallIdField = new TextField();
+        deleteHallIdField = new TextField();
         deleteHallIdField.setPromptText("CinemaHall ID to delete...");
         deleteHallIdField.setPrefWidth(70);
 
@@ -103,6 +108,11 @@ public class CinemaHallApplication extends VBox {
         }
         String response = hallService.createHall(name);
         updateStatus(response);
+
+        String clearResponce = response.toLowerCase();
+        if (!clearResponce.contains("error") && !clearResponce.contains("server")) {
+            Platform.runLater(() -> hallNameField.clear());
+        }
     }
 
     private void generateSeats(String hallId) {
@@ -125,6 +135,13 @@ public class CinemaHallApplication extends VBox {
         }
         String response = hallService.generateSeats(hallId, selectedSeats);
         updateStatus(response);
+
+        String clearResponce = response.toLowerCase();
+        if (!clearResponce.contains("error") && !clearResponce.contains("server")) {
+            Platform.runLater(() -> {hallNameField.clear();
+            resetSeatGrid();});
+
+        }
     }
 
     private void deleteHall(String hallId) {
@@ -134,6 +151,21 @@ public class CinemaHallApplication extends VBox {
         }
         String response = hallService.deleteHall(hallId);
         updateStatus(response);
+
+        String clearResponce = response.toLowerCase();
+        if (!clearResponce.contains("error") && !clearResponce.contains("server")) {
+            Platform.runLater(() -> deleteHallIdField.clear());
+
+        }
+    }
+
+    private void resetSeatGrid() {
+        for (int row = 0; row < 15; row++) {
+            for (int seat = 0; seat < 15; seat++) {
+                seatButtons[row][seat].setSelected(false);
+                seatButtons[row][seat].setStyle("-fx-background-color: #cccccc; -fx-border-color: #999999; -fx-cursor: hand;");
+            }
+        }
     }
 
     private void updateStatus(String text) {
