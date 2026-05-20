@@ -12,18 +12,34 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.example.backend.HallCreator.model.CinemaHall;
+import com.example.backend.HallCreator.repository.CinemaHallRepository;
+
 @RestController
 @RequestMapping("/api/schedule")
 public class ScheduleController {
 
-    public final MovieRepository movieRepository;
-    public final ScreeningRepository screeningRepository;
+    private final MovieRepository movieRepository;
+    private final ScreeningRepository screeningRepository;
+    private final CinemaHallRepository cinemaHallRepository;
 
-    public ScheduleController(MovieRepository movieRepository, ScreeningRepository screeningRepository) {
+    public ScheduleController(MovieRepository movieRepository, ScreeningRepository screeningRepository, CinemaHallRepository cinemaHallRepository) {
         this.movieRepository = movieRepository;
         this.screeningRepository = screeningRepository;
+        this.cinemaHallRepository = cinemaHallRepository;
     }
 
+    public MovieRepository getMovieRepository() {
+        return movieRepository;
+    }
+
+    public ScreeningRepository getScreeningRepository() {
+        return screeningRepository;
+    }
+
+    public CinemaHallRepository getCinemaHallRepository() {
+        return cinemaHallRepository;
+    }
     @PostMapping("/movies")
     public ResponseEntity<?> addMovie(@RequestBody Movie movie) {
         Movie savedMovie = movieRepository.save(movie);
@@ -111,7 +127,7 @@ public class ScheduleController {
     @GetMapping("/available-rooms")
     public ResponseEntity<?> getAvailableRooms(@RequestParam Long movieId, @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
 
-        Optional<Movie> movieOptional = movieRepository.findById(movieId);
+        Optional<Movie> movieOptional = getMovieRepository().findById(movieId);
         if(movieOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("movie not found");
         }
@@ -119,19 +135,43 @@ public class ScheduleController {
 
         LocalDateTime endTime = startTime.plusMinutes(movie.getDurationMinutes());
 
-        List<Integer> occupiedRooms = screeningRepository.findOccupiedRooms(startTime, endTime);
+        List<Integer> occupiedRooms = getScreeningRepository().findOccupiedRooms(startTime, endTime);
+        List<CinemaHall> hallsFromDb = getCinemaHallRepository().findAll();
+        List<RoomDto> availableRooms = new ArrayList<>();
 
-        List<Integer> allRooms = new ArrayList<>();
-        for(int i = 1; i <= 10; i++) {
-            allRooms.add(i);
+        for(CinemaHall hall : hallsFromDb) {
+            int hallId = hall.getId().intValue();
+            if(!occupiedRooms.contains(hallId)) {
+                availableRooms.add(new RoomDto(hallId, hall.getName()));
+            }
         }
 
-        allRooms.removeAll(occupiedRooms);
-
-        return ResponseEntity.ok(allRooms);
-
+        return ResponseEntity.ok(availableRooms);
     }
 
+    @GetMapping("/screenings")
+    public ResponseEntity<List<Screening>> getAllScreenings() {
+        return ResponseEntity.ok(screeningRepository.findAll());
+    }
 
+    public static class RoomDto {
+        private int id;
+        private String name;
 
+        public RoomDto() {}
+
+        public RoomDto(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 }
+

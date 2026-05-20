@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15.0" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.frontend.schedule.ScheduleBoardController">
+
+    <Label text="Current Schedule" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+    <TableView fx:id="scheduleTable" VBox.vgrow="ALWAYS" prefHeight="400.0" prefWidth="600.0">
+        <columns>
+            <TableColumn fx:id="dateColumn" text="Data" prefWidth="120"/>
+            <TableColumn fx:id="timeColumn" text="Time" prefWidth="100"/>
+            <TableColumn fx:id="movieColumn" text="Movie" prefWidth="250"/>
+            <TableColumn fx:id="hallColumn" text="Hall" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Refresh" onAction="#refreshSchedule" prefHeight="35.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

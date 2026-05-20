@@ -28,7 +28,7 @@ public class ScheduleViewController {
     private TextField timeField;
 
     @FXML
-    private ComboBox<Integer> roomComboBox;
+    private ComboBox<RoomDto> roomComboBox;
 
     @FXML
     private Label messageLabel;
@@ -37,6 +37,18 @@ public class ScheduleViewController {
     public void initialize() {
         messageLabel.setText("Loading movies from server...");
         loadMovies();
+
+        roomComboBox.setConverter(new javafx.util.StringConverter<RoomDto>() {
+            @Override
+            public String toString(RoomDto room) {
+                return room != null ? room.getName() : "";
+            }
+
+            @Override
+            public RoomDto fromString(String string) {
+                return null;
+            }
+        });
 
         movieComboBox.valueProperty().addListener((observable, oldValue, newValue) -> fetchAvailableRooms());
         startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> fetchAvailableRooms());
@@ -72,7 +84,7 @@ public class ScheduleViewController {
             }
         }).exceptionally(e -> {
             javafx.application.Platform.runLater(() -> {
-                messageLabel.setText("Nie można połączyć z serwerem!");
+                messageLabel.setText("no connection with a server");
                 messageLabel.setStyle("-fx-text-fill: red;");
             });
             return null;
@@ -102,8 +114,9 @@ public class ScheduleViewController {
                     .thenAccept(response -> {
                         if (response.statusCode() == 200) {
                             com.google.gson.Gson gson = new com.google.gson.Gson();
-                            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<Integer>>(){}.getType();
-                            java.util.List<Integer> rooms = gson.fromJson(response.body(), listType);
+
+                            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<RoomDto>>(){}.getType();
+                            java.util.List<RoomDto> rooms = gson.fromJson(response.body(), listType);
 
                             javafx.application.Platform.runLater(() -> {
                                 roomComboBox.getItems().clear();
@@ -129,7 +142,6 @@ public class ScheduleViewController {
     }
 
 
-    // UWAGA TA METODA POTRZEBUJE JESZCZE POPRAWKI I SPOJRZENIA
     @FXML
     public void handleSave() {
         if (movieComboBox.getValue() == null || startDatePicker.getValue() == null ||
@@ -144,7 +156,8 @@ public class ScheduleViewController {
             java.time.LocalDate startDate = startDatePicker.getValue();
             java.time.LocalDate endDate = endDatePicker.getValue();
             java.time.LocalTime time = java.time.LocalTime.parse(timeField.getText());
-            Integer roomNumber = roomComboBox.getValue();
+
+            Integer roomNumber = roomComboBox.getValue().getId();
 
             com.google.gson.Gson gson = new com.google.gson.Gson();
             String jsonPayload;
@@ -202,5 +215,4 @@ public class ScheduleViewController {
             messageLabel.setStyle("-fx-text-fill: red;");
         }
     }
-
 }

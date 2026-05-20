@@ -3,6 +3,6 @@ import javafx.application.Application;
 
 public class Launcher {
     public static void main(String[] args) {
-        Application.launch(CinemaHallApplication.class, args);
+        //Application.launch(CinemaHallApplication.class, args);
     }
 }
