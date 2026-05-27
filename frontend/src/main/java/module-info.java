@@ -22,4 +22,5 @@ module com.example.frontend {
     opens com.example.frontend.creator to javafx.graphics, javafx.fxml;
     opens com.example.frontend.adminDashboard to javafx.fxml;
     opens com.example.frontend.statistics to javafx.fxml, javafx.base, com.fasterxml.jackson.databind;
+    opens com.example.frontend.EmployeeDashboard to javafx.fxml;
 }
