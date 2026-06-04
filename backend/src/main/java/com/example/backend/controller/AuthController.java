@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.AuthRequest;
+import com.example.backend.dto.AuthResponse;
 import com.example.backend.model.Employee;
 import com.example.backend.repository.EmployeeRepository;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Incorrect password");
         }
 
-        return ResponseEntity.ok("Success login employee: " + employee.getRole());
-    }
+        return ResponseEntity.ok(new AuthResponse("Success", employee.getRole()));    }
 
 }
