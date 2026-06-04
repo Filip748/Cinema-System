@@ -27,6 +27,7 @@ public class Movie {
     public String getGenre() { return genre; }
     public int getDurationMinutes() { return durationMinutes; }
 
+    public void setId(Long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setGenre(String genre) { this.genre = genre; }
     public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }

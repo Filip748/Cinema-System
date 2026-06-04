@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public class BulkScreeningRequest {
     private Long movieId;
-    private int roomNumber;
+    private Long cinemaHallId;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
@@ -20,12 +20,12 @@ public class BulkScreeningRequest {
         this.movieId = movieId;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public Long getCinemaHallId() {
+        return cinemaHallId;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setCinemaHallId(Long cinemaHallId) {
+        this.cinemaHallId = cinemaHallId;
     }
 
     public LocalDate getStartDate() {
