@@ -103,8 +103,9 @@ public class LoginController {
             Parent root = loader.load();
             Stage stage = (Stage) getUsernameField().getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setFullScreen(true);
+
             stage.setFullScreenExitHint("");
+            stage.setFullScreen(true);
             stage.show();
         } catch (Exception e) {
             getMessageLabel().setTextFill(Color.RED);
