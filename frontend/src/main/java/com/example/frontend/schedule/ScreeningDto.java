@@ -4,7 +4,7 @@ public class ScreeningDto {
 
     private Long id;
     private MovieDto movie;
-    private int roomNumber;
+    private CinemaHallDto cinemaHall;
     private String startTime;
     private String endTime;
 
@@ -12,13 +12,13 @@ public class ScreeningDto {
 
     public Long getId() { return id; }
     public MovieDto getMovie() { return movie; }
-    public int getRoomNumber() { return roomNumber; }
+    public CinemaHallDto getCinemaHall() { return cinemaHall; }
     public String getStartTime() { return startTime; }
     public String getEndTime() { return endTime; }
 
     public void setId(Long id) { this.id = id; }
     public void setMovie(MovieDto movie) { this.movie = movie; }
-    public void setRoomNumber(int roomNumber) { this.roomNumber = roomNumber; }
+    public void setCinemaHall(CinemaHallDto cinemaHall) { this.cinemaHall = cinemaHall; }
     public void setStartTime(String startTime) { this.startTime = startTime; }
     public void setEndTime(String endTime) { this.endTime = endTime; }
 }

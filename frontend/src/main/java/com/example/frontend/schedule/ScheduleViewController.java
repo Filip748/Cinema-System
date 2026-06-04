@@ -157,7 +157,7 @@ public class ScheduleViewController {
             java.time.LocalDate endDate = endDatePicker.getValue();
             java.time.LocalTime time = java.time.LocalTime.parse(timeField.getText());
 
-            Integer roomNumber = roomComboBox.getValue().getId();
+            Long cinemaHallId = Long.valueOf(roomComboBox.getValue().getId());
 
             com.google.gson.Gson gson = new com.google.gson.Gson();
             String jsonPayload;
@@ -167,7 +167,7 @@ public class ScheduleViewController {
             if (endDate != null && endDate.isAfter(startDate)) {
                 targetUrl = "http://localhost:8080/api/schedule/screenings/bulk";
                 requestData.put("movieId", movieId);
-                requestData.put("roomNumber", roomNumber);
+                requestData.put("cinemaHallId", cinemaHallId);
                 requestData.put("startDate", startDate.toString());
                 requestData.put("endDate", endDate.toString());
                 requestData.put("startTime", time.toString() + ":00");
@@ -175,7 +175,7 @@ public class ScheduleViewController {
                 targetUrl = "http://localhost:8080/api/schedule/screenings";
                 java.time.LocalDateTime startDateTime = java.time.LocalDateTime.of(startDate, time);
                 requestData.put("movieId", movieId);
-                requestData.put("roomNumber", roomNumber);
+                requestData.put("cinemaHallId", cinemaHallId);
                 requestData.put("startTime", startDateTime.toString());
             }
 
