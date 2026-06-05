@@ -1,0 +1,23 @@
+package com.example.frontend.ticketSales;
+
+import java.util.List;
+
+public class TicketDto {
+    private Long screeningId;
+    private List<Long> seatIds;
+    private String customerEmail;
+
+    public TicketDto() {}
+    public TicketDto(Long screeningId, List<Long> seatIds, String customerEmail) {
+        this.screeningId = screeningId;
+        this.seatIds = seatIds;
+        this.customerEmail = customerEmail;
+    }
+
+    public Long getScreeningId() { return screeningId; }
+    public void setScreeningId(Long screeningId) { this.screeningId = screeningId; }
+    public List<Long> getSeatIds() { return seatIds; }
+    public void setSeatIds(List<Long> seatIds) { this.seatIds = seatIds; }
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+}
