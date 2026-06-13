@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import com.example.frontend.User;
 
 public class LoginController {
 
@@ -54,6 +55,13 @@ public class LoginController {
         if(response.getRole() != null) {
             getMessageLabel().setTextFill(Color.GREEN);
             getMessageLabel().setText(response.getMessage());
+            //dodalem zeby zczytac kto sie loguje
+            User.getInstance().login(
+                    response.getEmployeeId(),
+                    response.getUsername(),
+                    response.getRole()
+            );
+
             routeUser(response.getRole());
         } else {
             getMessageLabel().setTextFill(Color.RED);
