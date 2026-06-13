@@ -1,5 +1,6 @@
 package com.example.backend.schedule;
 
+import com.example.backend.HallCreator.model.CinemaHall;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
@@ -17,16 +18,18 @@ public class Screening {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    private int roomNumber;
+    @ManyToOne
+    @JoinColumn(name = "cinema_hall_id", nullable = false)
+    private CinemaHall cinemaHall;
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     public Screening() {}
 
-    public Screening(Movie movie, int roomNumber, LocalDateTime startTime, LocalDateTime endTime) {
+    public Screening(Movie movie, CinemaHall cinemaHall, LocalDateTime startTime, LocalDateTime endTime) {
         this.movie = movie;
-        this.roomNumber = roomNumber;
+        this.cinemaHall = cinemaHall;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -43,12 +46,12 @@ public class Screening {
         this.movie = movie;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public CinemaHall getCinemaHall() {
+        return cinemaHall;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setCinemaHall(CinemaHall cinemaHall) {
+        this.cinemaHall = cinemaHall;
     }
 
     public LocalDateTime getStartTime() {

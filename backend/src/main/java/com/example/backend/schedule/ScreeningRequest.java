@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class ScreeningRequest {
     private Long movieId;
-    private int roomNumber;
+    private Long cinemaHallId;
     private LocalDateTime startTime;
 
     public ScreeningRequest() {}
@@ -17,12 +17,12 @@ public class ScreeningRequest {
         this.movieId = movieId;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public Long getCinemaHallId() {
+        return cinemaHallId;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setCinemaHallId(Long roomNumber) {
+        this.cinemaHallId = roomNumber;
     }
 
     public LocalDateTime getStartTime() {

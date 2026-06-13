@@ -50,8 +50,8 @@ public class ScheduleBoardController {
             if (screeningsFromDb != null) {
                 for (ScreeningDto screening : screeningsFromDb) {
 
-                    String date = "Brak daty";
-                    String time = "Brak godziny";
+                    String date = "No data";
+                    String time = "No hour";
 
                     if (screening.getStartTime() != null) {
                         String[] parts = screening.getStartTime().split("T");
@@ -64,9 +64,10 @@ public class ScheduleBoardController {
                     }
 
                     String movieTitle = (screening.getMovie() != null && screening.getMovie().getTitle() != null)
-                            ? screening.getMovie().getTitle() : "Brak tytułu";
+                            ? screening.getMovie().getTitle() : "No title";
 
-                    String hallName = "Sala " + screening.getRoomNumber();
+                    String hallName = (screening.getCinemaHall() != null && screening.getCinemaHall().getName() != null)
+                            ? screening.getCinemaHall().getName() : "No hall";
 
                     items.add(new ScreeningItem(date, time, movieTitle, hallName));
                 }
@@ -75,7 +76,7 @@ public class ScheduleBoardController {
             getScheduleTable().setItems(items);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //
         }
     }
 

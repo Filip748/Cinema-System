@@ -7,6 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -44,10 +47,7 @@ public class AdminDashboardController {
         Node view = new CinemaHallApplication();
 
         if (view instanceof javafx.scene.layout.Region) {
-            ((javafx.scene.layout.Region) view).setMaxSize(
-                    javafx.scene.layout.Region.USE_PREF_SIZE,
-                    javafx.scene.layout.Region.USE_PREF_SIZE
-            );
+            ((javafx.scene.layout.Region) view).setMaxSize(javafx.scene.layout.Region.USE_PREF_SIZE, javafx.scene.layout.Region.USE_PREF_SIZE);
         }
 
         javafx.scene.layout.StackPane.setAlignment(view, javafx.geometry.Pos.CENTER);
@@ -61,7 +61,17 @@ public class AdminDashboardController {
 
     @FXML
     public void logout() {
-        showPlaceholder("Log out");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/frontend/login/login-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 400));
+            stage.setFullScreen(false);
+            stage.centerOnScreen();
+
+        } catch (IOException e) {
+            showPlaceholder("Error");
+        }
     }
 
     private void loadView(String fxmlPath) {
@@ -71,10 +81,7 @@ public class AdminDashboardController {
             contentArea.getChildren().clear();
 
             if (view instanceof javafx.scene.layout.Region) {
-                ((javafx.scene.layout.Region) view).setMaxSize(
-                        javafx.scene.layout.Region.USE_PREF_SIZE,
-                        javafx.scene.layout.Region.USE_PREF_SIZE
-                );
+                ((javafx.scene.layout.Region) view).setMaxSize(javafx.scene.layout.Region.USE_PREF_SIZE, javafx.scene.layout.Region.USE_PREF_SIZE);
             }
 
             javafx.scene.layout.StackPane.setAlignment(view, javafx.geometry.Pos.CENTER);
@@ -83,7 +90,6 @@ public class AdminDashboardController {
 
         } catch (IOException e) {
             showPlaceholder("ERROR");
-            e.printStackTrace();
         } catch (NullPointerException e) {
             showPlaceholder("ERROR" + fxmlPath);
         }

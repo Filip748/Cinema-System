@@ -16,38 +16,55 @@ public class AuthService {
         this.gson = new Gson();
     }
 
+    public HttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public Gson getGson() {
+        return gson;
+    }
+
     public String register(String username, String password) {
         try {
             AuthRequest requestData = new AuthRequest(username, password);
-            String jsonBody = gson.toJson(requestData);
+            String jsonBody = getGson().toJson(requestData);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BACKEND_URL + "/register"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
-            return "Cannot connect with a server.";
+            return "Cannot connect with a server";
         }
     }
 
-    public String login(String username, String password) {
+    public AuthResponseDto login(String username, String password) {
         try {
             AuthRequest requestData = new AuthRequest(username, password);
-            String jsonBody = gson.toJson(requestData);
+            String jsonBody = getGson().toJson(requestData);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BACKEND_URL + "/login"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body();
+            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return getGson().fromJson(response.body(), AuthResponseDto.class);
+            } else {
+                AuthResponseDto errorDto = new AuthResponseDto();
+                errorDto.setMessage("Incorrect login or password");
+                return errorDto;
+            }
 
         } catch (Exception e) {
-            return "Cannot connect with a server.";
+            AuthResponseDto errorDto = new AuthResponseDto();
+            errorDto.setMessage("Cannot connect with a server");
+            return errorDto;
         }
     }
 }

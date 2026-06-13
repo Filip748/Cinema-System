@@ -54,28 +54,32 @@ public class ScheduleController {
     @PostMapping("/screenings")
     public ResponseEntity<?> addScreening(@RequestBody ScreeningRequest request) {
 
-        Optional<Movie> movieOptional = movieRepository.findById(request.getMovieId());
-
+        Optional<Movie> movieOptional = getMovieRepository().findById(request.getMovieId());
         if(movieOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Movie not found");
         }
-
         Movie movie = movieOptional.get();
+
+        Optional<CinemaHall> hallOptional = getCinemaHallRepository().findById(request.getCinemaHallId());
+        if(hallOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Hall not found");
+        }
+        CinemaHall hall = hallOptional.get();
 
         LocalDateTime endTime = request.getStartTime().plusMinutes(movie.getDurationMinutes() + 30);
 
-        List<Screening> conflicts = screeningRepository.findOverLappingScreenings(
-                request.getRoomNumber(),
+        List<Screening> conflicts = getScreeningRepository().findOverLappingScreenings(
+                hall.getId(),
                 request.getStartTime(),
                 endTime
         );
 
         if(!conflicts.isEmpty()) {
-            return ResponseEntity.badRequest().body("Room " + request.getRoomNumber() + "is reserved");
+            return ResponseEntity.badRequest().body("Room " + hall.getName() + " is reserved");
         }
 
-        Screening screening = new Screening(movie, request.getRoomNumber(), request.getStartTime(), endTime);
-        screeningRepository.save(screening);
+        Screening screening = new Screening(movie, hall, request.getStartTime(), endTime);
+        getScreeningRepository().save(screening);
 
         return ResponseEntity.ok("Success movie added to the schedule");
     }
@@ -83,12 +87,18 @@ public class ScheduleController {
     @PostMapping("/screenings/bulk")
     public ResponseEntity<?> addBulkScreenings(@RequestBody BulkScreeningRequest request) {
 
-        Optional<Movie> movieOptional = movieRepository.findById(request.getMovieId());
+        Optional<Movie> movieOptional = getMovieRepository().findById(request.getMovieId());
         if(movieOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("movie not found");
         }
-
         Movie movie = movieOptional.get();
+
+        Optional<CinemaHall> hallOptional = getCinemaHallRepository().findById(request.getCinemaHallId());
+        if(hallOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Hall not found");
+        }
+        CinemaHall hall = hallOptional.get();
+
         List<Screening> validScreenings = new ArrayList<>();
         List<String> skippedDates = new ArrayList<>();
 
@@ -97,14 +107,14 @@ public class ScheduleController {
             LocalDateTime startDateTime = LocalDateTime.of(currentDate, request.getStartTime());
             LocalDateTime endaDateTime = startDateTime.plusMinutes((movie.getDurationMinutes()));
 
-            List<Screening> conflicts = screeningRepository.findOverLappingScreenings(
-                    request.getRoomNumber(),
+            List<Screening> conflicts = getScreeningRepository().findOverLappingScreenings(
+                    hall.getId(),
                     startDateTime,
                     endaDateTime
             );
 
             if(conflicts.isEmpty()) {
-                validScreenings.add(new Screening(movie, request.getRoomNumber(), startDateTime, endaDateTime));
+                validScreenings.add(new Screening(movie, hall, startDateTime, endaDateTime));
             } else {
                 skippedDates.add(currentDate.toString());
             }
@@ -113,19 +123,19 @@ public class ScheduleController {
         }
 
         if(!validScreenings.isEmpty()) {
-            screeningRepository.saveAll(validScreenings);
+            getScreeningRepository().saveAll(validScreenings);
         }
 
         if(skippedDates.isEmpty()) {
             return ResponseEntity.ok("Success all screenings have been added");
         } else {
             String skippedMsg = String.join(", ", skippedDates);
-            return ResponseEntity.ok("Screenings have benn added, but we skip these dates because room is busy");
+            return ResponseEntity.ok("Screenings have been added without with a colision");
         }
     }
 
     @GetMapping("/available-rooms")
-    public ResponseEntity<?> getAvailableRooms(@RequestParam Long movieId, @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
+    public ResponseEntity<?> getAvailableRooms(@RequestParam Long movieId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
 
         Optional<Movie> movieOptional = getMovieRepository().findById(movieId);
         if(movieOptional.isEmpty()) {
@@ -135,12 +145,12 @@ public class ScheduleController {
 
         LocalDateTime endTime = startTime.plusMinutes(movie.getDurationMinutes());
 
-        List<Integer> occupiedRooms = getScreeningRepository().findOccupiedRooms(startTime, endTime);
+        List<Long> occupiedRooms = getScreeningRepository().findOccupiedRooms(startTime, endTime);
         List<CinemaHall> hallsFromDb = getCinemaHallRepository().findAll();
         List<RoomDto> availableRooms = new ArrayList<>();
 
         for(CinemaHall hall : hallsFromDb) {
-            int hallId = hall.getId().intValue();
+            Long hallId = hall.getId();
             if(!occupiedRooms.contains(hallId)) {
                 availableRooms.add(new RoomDto(hallId, hall.getName()));
             }
@@ -151,21 +161,21 @@ public class ScheduleController {
 
     @GetMapping("/screenings")
     public ResponseEntity<List<Screening>> getAllScreenings() {
-        return ResponseEntity.ok(screeningRepository.findAll());
+        return ResponseEntity.ok(getScreeningRepository().findAll());
     }
 
     public static class RoomDto {
-        private int id;
+        private Long id;
         private String name;
 
         public RoomDto() {}
 
-        public RoomDto(int id, String name) {
+        public RoomDto(Long id, String name) {
             this.id = id;
             this.name = name;
         }
 
-        public int getId() {
+        public Long getId() {
             return id;
         }
 
