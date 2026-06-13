@@ -3,9 +3,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.HallCreator.model.Seat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long>{
 
     @Transactional
     void deleteByCinemaHallId(Long cinemaHallId);
+
+    List<Seat> findByCinemaHallId(Long cinemaHallId);
 }

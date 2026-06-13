@@ -42,6 +42,23 @@ public class EmployeeController {
 
         }
     }
+    //guzik od przejscia do sprzedazy
+    @FXML
+    public void showTicketSales() {
+        try {
+            contentArea.getChildren().clear();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/frontend/tickets/ticket-sales-view.fxml"));
+            Node salesView = loader.load();
+            StackPane.setAlignment(salesView, javafx.geometry.Pos.CENTER);
+            contentArea.getChildren().add(salesView);
+
+        } catch (IOException e) {
+            Label errorLabel = new Label("Error, cannot load ticket sales");
+            contentArea.getChildren().add(errorLabel);
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void logout(){

@@ -139,7 +139,8 @@ public class CinemaHallApplication extends VBox {
         String clearResponce = response.toLowerCase();
         if (!clearResponce.contains("error") && !clearResponce.contains("server")) {
             Platform.runLater(() -> {hallNameField.clear();
-            resetSeatGrid();});
+            resetSeatGrid();
+            hallIdField.clear();});
 
         }
     }
