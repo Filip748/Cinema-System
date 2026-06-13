@@ -4,9 +4,12 @@ import com.example.frontend.creator.CinemaHallApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 
 import java.io.IOException;
@@ -61,11 +64,25 @@ public class EmployeeController {
 
 
     @FXML
-    public void logout(){
+    public void logout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/frontend/login/login-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 400));
+            stage.setFullScreen(false);
+            stage.centerOnScreen();
+
+        } catch (IOException e) {
+            showPlaceholder("Error");
+        }
+    }
+
+    private void showPlaceholder(String text) {
         contentArea.getChildren().clear();
-        Label logoutLabel = new Label("logged out");
-        StackPane.setAlignment(logoutLabel, javafx.geometry.Pos.CENTER);
-        contentArea.getChildren().add(logoutLabel);
+        Label label = new Label(text);
+        label.setStyle("-fx-font-size: 24px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;");
+        contentArea.getChildren().add(label);
     }
 
     public StackPane getContentArea() {

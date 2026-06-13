@@ -38,12 +38,10 @@ class ScheduleControllerTest {
 
     @BeforeEach
     public void setUp() {
-        // Przygotowanie mocków, aby nie łączyć się z prawdziwą bazą danych
         this.movieRepository = Mockito.mock(MovieRepository.class);
         this.screeningRepository = Mockito.mock(ScreeningRepository.class);
         this.cinemaHallRepository = Mockito.mock(CinemaHallRepository.class);
 
-        // Wstrzyknięcie zmockowanych repozytoriów do testowanego kontrolera
         this.scheduleController = new ScheduleController(
                 getMovieRepository(),
                 getScreeningRepository(),
@@ -53,38 +51,71 @@ class ScheduleControllerTest {
 
     @Test
     public void testAddMovieSuccess() {
-        // 1. Arrange (Przygotowanie danych)
-
-        // Obiekt symulujący dane przychodzące z frontendu (bez ID)
         Movie inputMovie = new Movie();
         inputMovie.setTitle("TestFilm");
         inputMovie.setDurationMinutes(100);
 
-        // Obiekt symulujący odpowiedź z bazy danych (z nadanym automatycznie ID)
         Movie savedMovie = new Movie();
         savedMovie.setId(1L);
         savedMovie.setTitle("TestFilm");
         savedMovie.setDurationMinutes(100);
 
-        // Uczymy mocka, jak ma się zachować:
-        // "Kiedy ktoś wywoła metodę save() z dowolnym obiektem Movie, zwróć nasz obiekt savedMovie"
         when(getMovieRepository().save(any(Movie.class))).thenReturn(savedMovie);
 
-        // 2. Act (Wykonanie testowanej logiki)
         ResponseEntity<?> response = getScheduleController().addMovie(inputMovie);
 
-        // 3. Assert (Sprawdzenie wyników)
 
-        // Weryfikujemy, czy kontroler zwrócił kod 200 OK
         assertEquals(200, response.getStatusCode().value());
 
-        // Weryfikujemy, czy w ciele odpowiedzi cokolwiek jest
         assertNotNull(response.getBody());
 
-        // Rzutujemy ciało odpowiedzi na obiekt Movie i sprawdzamy jego parametry
         Movie responseBody = (Movie) response.getBody();
         assertEquals(1L, responseBody.getId());
         assertEquals("TestFilm", responseBody.getTitle());
         assertEquals(100, responseBody.getDurationMinutes());
+    }
+
+    @Test
+    public void testAddScreeningSuccess() {
+        // 1. Arrange (Przygotowanie danych wejściowych)
+        ScreeningRequest request = new ScreeningRequest();
+        request.setMovieId(1L);
+        request.setCinemaHallId(1L);
+        request.setStartTime(java.time.LocalDateTime.of(2026, 12, 10, 15, 0));
+
+        // Tworzymy atrapy obiektów z bazy
+        Movie mockMovie = new Movie();
+        mockMovie.setId(1L);
+        mockMovie.setTitle("Incepcja");
+        mockMovie.setDurationMinutes(148);
+
+        com.example.backend.HallCreator.model.CinemaHall mockHall = new com.example.backend.HallCreator.model.CinemaHall();
+        mockHall.setId(1L);
+        mockHall.setName("Sala VIP");
+
+        Screening savedScreening = new Screening();
+        savedScreening.setId(100L);
+        savedScreening.setMovie(mockMovie);
+        savedScreening.setCinemaHall(mockHall);
+        savedScreening.setStartTime(request.getStartTime());
+
+
+        when(getMovieRepository().findById(1L)).thenReturn(java.util.Optional.of(mockMovie));
+
+        when(getCinemaHallRepository().findById(1L)).thenReturn(java.util.Optional.of(mockHall));
+
+        when(getScreeningRepository().findOverLappingScreenings(
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any()
+        )).thenReturn(java.util.Collections.emptyList());
+
+        when(getScreeningRepository().save(org.mockito.ArgumentMatchers.any(Screening.class))).thenReturn(savedScreening);
+
+        ResponseEntity<?> response = getScheduleController().addScreening(request);
+
+        assertEquals(200, response.getStatusCode().value());
+
+        assertNotNull(response.getBody());
     }
 }

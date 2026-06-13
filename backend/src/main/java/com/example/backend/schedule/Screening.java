@@ -38,6 +38,8 @@ public class Screening {
         return id;
     }
 
+    public void setId(Long id) {this.id = id; }
+
     public Movie getMovie() {
         return movie;
     }
@@ -69,4 +71,5 @@ public class Screening {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
 }

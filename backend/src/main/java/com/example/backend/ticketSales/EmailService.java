@@ -11,7 +11,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendTicketConfirmation(String to, String movieTitle, int roomNumber, String seatsInfo) {
+    public void sendTicketConfirmation(String to, String movieTitle, String roomNumber, String seatsInfo) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Confirmation of movie ticket purchase");

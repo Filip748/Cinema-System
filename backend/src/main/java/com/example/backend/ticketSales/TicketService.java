@@ -28,7 +28,7 @@ public class TicketService {
         List<Long> takenSeatsIds = soldTickets.stream().map(ticket -> ticket.getSeat().getId()).toList();
 
         Screening screening = screeningRepository.findById(screeningId).orElseThrow(() -> new RuntimeException("Screening not found"));
-        Long cinemaHallId = (long) screening.getRoomNumber();
+        Long cinemaHallId = screening.getCinemaHall().getId();
 
         List<Seat> realSeats = seatRepository.findByCinemaHallId(cinemaHallId);
         List<SeatDto> toShowSeats = new ArrayList<>();
@@ -45,7 +45,7 @@ public class TicketService {
 
         StringBuilder seatsInfo = new StringBuilder();
         String movieTitle = screening.getMovie().getTitle();
-        int roomNumber = screening.getRoomNumber();
+        String roomName = screening.getCinemaHall().getName();
 
         for(Long seatId : request.getSeatIds()){
             Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new RuntimeException("Seat not found"));
@@ -57,7 +57,7 @@ public class TicketService {
 
         if (request.getCustomerEmail() != null && !request.getCustomerEmail().trim().isEmpty()) {
             try {
-                emailService.sendTicketConfirmation(request.getCustomerEmail(), movieTitle, roomNumber, seatsInfo.toString());
+                emailService.sendTicketConfirmation(request.getCustomerEmail(), movieTitle, roomName, seatsInfo.toString());
             } catch (Exception e) {
                 System.err.println("Error with mail" + e.getMessage());
             }

@@ -70,7 +70,7 @@ public class TicketSalesController {
             if (newVal != null) {
                 selectedScreening = newVal;
                 String title = (newVal.getMovie() != null) ? newVal.getMovie().getTitle() : "Unknown";
-                selectedMovieLabel.setText("Movie: " + title + "\nRoom: " + newVal.getRoomNumber());
+                selectedMovieLabel.setText("Movie: " + title + "\nHall: " + newVal.getCinemaHall().getName());
                 resetCart();
                 drawSeats();
             }
@@ -208,6 +208,11 @@ public class TicketSalesController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        if (screeningTable.getScene() != null && screeningTable.getScene().getWindow() != null) {
+            alert.initOwner(screeningTable.getScene().getWindow());
+        }
+
         alert.showAndWait();
     }
 }
