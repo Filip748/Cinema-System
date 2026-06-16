@@ -3,6 +3,7 @@ package com.example.backend.ticketSales;
 import com.example.backend.HallCreator.model.Seat;
 import com.example.backend.HallCreator.model.CinemaHall;
 import com.example.backend.schedule.Screening;
+import com.example.backend.model.Employee;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,12 +22,17 @@ public class Ticket {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
     private String customerEmail;
 
     public Ticket() {}
-    public Ticket(Screening screening, Seat seat, String customerEmail) {
+    public Ticket(Screening screening, Seat seat,Employee employee, String customerEmail) {
         this.screening = screening;
         this.seat = seat;
+        this.employee = employee;
         this.customerEmail = customerEmail;
     }
 
@@ -34,10 +40,12 @@ public class Ticket {
     public Long getId() { return id; }
     public Screening getScreening() { return screening; }
     public Seat getSeat() { return seat; }
+    public Employee getEmployee() { return employee; }
     public String getCustomerEmail() { return customerEmail; }
 
     public void setId(Long id) { this.id = id; }
     public void setScreening(Screening screening) { this.screening = screening; }
     public void setSeat(Seat seat) { this.seat = seat; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
 }

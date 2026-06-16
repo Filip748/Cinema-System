@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-
+import com.example.frontend.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,7 +189,8 @@ public class TicketSalesController {
 
         try {
             String email = clientEmailField.getText();
-            TicketDto purchaseData = new TicketDto(selectedScreening.getId(), selectedSeatIds, email);
+            Long currentId = User.getInstance().getEmployeeId();
+            TicketDto purchaseData = new TicketDto(selectedScreening.getId(), selectedSeatIds, email, currentId);
             String result = ticketService.sendTicketPurchase(purchaseData);
 
             showAlert("Success", "Transaction Complete!\n" + result, Alert.AlertType.INFORMATION);

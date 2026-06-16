@@ -56,6 +56,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Incorrect password");
         }
 
-        return ResponseEntity.ok(new AuthResponse("Success", employee.getRole()));    }
+        return ResponseEntity.ok(new AuthResponse("Success", employee.getRole(), employee.getId(), employee.getUsername()));    }
 
 }

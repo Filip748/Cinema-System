@@ -6,6 +6,7 @@ public class TicketDto {
     private Long screeningId;
     private List<Long> seatIds;
     private String customerEmail;
+    private Long employeeId;
 
     public TicketDto() {}
     public TicketDto(Long screeningId, List<Long> seatIds, String customerEmail) {
@@ -20,4 +21,9 @@ public class TicketDto {
     public void setSeatIds(List<Long> seatIds) { this.seatIds = seatIds; }
     public String getCustomerEmail() { return customerEmail; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+    public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+
 }
+
+
